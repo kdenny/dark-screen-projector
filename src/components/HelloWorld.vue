@@ -4,8 +4,10 @@
       <div class="center-title">
         This is a center
       </div>
-      <div class="lower-text">
-        This is some smaller text
+      <div class="lower-box">
+        <div class="lower-text">
+          This is some smaller text
+        </div>
       </div>
     </div>
   </div>
@@ -46,20 +48,20 @@ a {
   }
   .center {
     position: absolute;
-    top: 150px;
-    left: 550px;
-    height: 600px;
-    width: 600px;
+    top: 10vh;
+    left: 25vw;
+    height: 80vh;
+    width: 50vw;
     border: 1px solid white;
   }
   .center-title {
     margin-top: 20px;
   }
   .lower-text {
-    position: absolute;
     text-align: center;
-    bottom: 100px;
-    left: 200px;
     font-size: 12pt;
+  }
+  .lower-box {
+    margin-top: 50vh;
   }
 </style>
