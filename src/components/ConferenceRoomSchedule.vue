@@ -1,6 +1,6 @@
 <template>
   <div class="full">
-    <div class="calendar-title">Schedule for {{ room.name }}</div>
+    <div class="calendar-title">Schedule for {{ room.name }} <span v-if="listening">**</span></div>
     <div v-if="schedule" class="schedule">
       <div v-for="day in days" v-bind:key="day" class="day-row">
         <div class="day-title">
@@ -31,31 +31,94 @@
 
       </div>
     </div>
+    <div v-if="!schedule" class="schedule">
+      Loading room schedule...
+    </div>
 
   </div>
 </template>
 
 <script>
-import * as d3 from 'd3'
+  /* eslint-disable */
+
+  import * as d3 from 'd3'
 export default {
   name: 'ConferenceRoomSchedule',
-  props: ['room'],
+  props: [],
   data () {
     return {
-      rawSchedule: null
+      rawSchedule: null,
+      transcription: [],
+      listening: false,
+      room: null,
+      rd: {
+        'tinypass.com_393837353833373831@resource.calendar.google.com': {
+          name: 'Large Conference Room',
+          key: 'tinypass.com_393837353833373831@resource.calendar.google.com'
+        },
+        'tinypass.com_343739343839323532@resource.calendar.google.com': {
+          name: 'Small Conference Room',
+          key: 'tinypass.com_343739343839323532@resource.calendar.google.com'
+        }
+      }
     }
   },
   mounted: function() {
-    this.getRoomSchedule()
+    var me = this
+    let room = this.$route.query.room
+    console.log(room)
+    if (room) {
+      this.room = this.rd[room]
+      this.getRoomSchedule()
+      this.listen()
+    }
+    setTimeout(function(){
+      me.getRoomSchedule();
+      me.listen();
+      }, 30000);
   },
   methods: {
     getRoomSchedule () {
       var me = this
+      this.rawSchedule = null
       let u = 'https://pnfv2.piano.io/ops/calendar/?room=' + this.room.key
       this.$http.get(u).then(resp => {
         me.rawSchedule = resp.data
         console.log(me.rawSchedule)
       })
+    },
+    listen () {
+      var me = this
+      this.listening = true
+      window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
+      if (!SpeechRecognition && process.env.NODE_ENV !== 'production') {
+        throw new Error('Speech Recognition does not exist on this browser. Use Chrome or Firefox')
+      }
+      if (!SpeechRecognition) {
+        console.log("Speech failed :(")
+        return
+      }
+      console.log("Starting listening")
+      this.recognition = new SpeechRecognition()
+      this.recognition.lang = 'en-US'
+      this.recognition.interimResults = true
+      this.recognition.addEventListener('result', event => {
+        const text = Array.from(event.results)
+            .map(result => result[0])
+            .map(result => result.transcript)
+            .join('')
+        console.log(text)
+        me.runtimeTranscription = text
+      })
+
+      this.recognition.addEventListener('end', () => {
+        if (this.runtimeTranscription !== '') {
+          this.transcription.push(this.runtimeTranscription)
+          console.log(this.transcription)
+        }
+        this.runtimeTranscription = ''
+      })
+      me.recognition.start()
     }
   },
   computed: {

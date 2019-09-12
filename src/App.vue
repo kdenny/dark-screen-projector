@@ -1,29 +1,17 @@
 <template>
   <div id="app">
     <!--<HelloWorld msg="Welcome to Your Vue.js App"/>-->
-    <conference_room :room="currentRoom"></conference_room>
+    <router-view/>
   </div>
 </template>
 
 <script>
 // import HelloWorld from './components/HelloWorld.vue'
-import ConferenceRoomSchedule from './components/ConferenceRoomSchedule.vue'
 
 export default {
   name: 'app',
-  components: {
-    conference_room: ConferenceRoomSchedule
-  },
   data () {
     return {
-      currentRoom: {
-        name: 'Large Conference Room',
-        key: 'tinypass.com_393837353833373831@resource.calendar.google.com'
-      }
-      // currentRoom: {
-      //   name: 'Small Conference Room',
-      //   key: 'tinypass.com_343739343839323532@resource.calendar.google.com'
-      // }
     }
   }
 }
