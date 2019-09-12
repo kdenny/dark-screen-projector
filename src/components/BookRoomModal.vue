@@ -96,6 +96,8 @@ export default {
               } else {
                 me.parseTime(this.runtimeTranscription)
               }
+            } else {
+              me.listen()
             }
           } else {
             if (this.runtimeTranscription !== '') {
@@ -121,7 +123,7 @@ export default {
       let dateFormat = d3.timeFormat("%Y-%m-%d")
       let nt = text.replace("p.m.","PM").replace("pm","PM").replace("P.M.","PM").replace("P.m.","PM").replace("a.m.","AM").replace("am","AM").replace("A.M.","AM").replace("A.m.","AM")
       console.log(nt)
-      if (nt.includes("PM") || text.includes("AM")) {
+      if (nt.includes("PM") || nt.includes("AM")) {
         this.booking.start = nt
         let today = new Date()
         today = today.setHours(0,0,0,0)
