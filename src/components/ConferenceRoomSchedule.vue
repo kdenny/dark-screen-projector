@@ -46,7 +46,7 @@ export default {
   methods: {
     getRoomSchedule () {
       var me = this
-      let u = 'http://pnfv2.piano.io/ops/calendar/?room=' + this.room.key
+      let u = 'https://pnfv2.piano.io/ops/calendar/?room=' + this.room.key
       this.$http.get(u).then(resp => {
         me.rawSchedule = resp.data
         console.log(me.rawSchedule)
@@ -113,7 +113,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
 
   .full {
     background-color: black;
