@@ -98,7 +98,6 @@ export default {
     },
     listen () {
       var me = this
-      this.listening = true
       window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
       if (!SpeechRecognition && process.env.NODE_ENV !== 'production') {
         throw new Error('Speech Recognition does not exist on this browser. Use Chrome or Firefox')
@@ -106,6 +105,8 @@ export default {
       if (!SpeechRecognition) {
         console.log("Speech failed :(")
         return
+      } else {
+        this.listening = true
       }
       console.log("Starting listening")
       this.recognition = new SpeechRecognition()
