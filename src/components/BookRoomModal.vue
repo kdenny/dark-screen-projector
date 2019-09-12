@@ -57,7 +57,7 @@ export default {
     this.listen()
     setTimeout(function(){
       if (!me.booking.start) {
-        this.$emit('close')
+        me.$emit('close')
       }
     }, 30000);
   },
@@ -88,6 +88,7 @@ export default {
 
       this.recognition.addEventListener('end', () => {
         if (this.runtimeTranscription) {
+          let llt = this.runtimeTranscription.replace("concern","confirm").replace("quotes","close")
           console.log(this.runtimeTranscription)
           if (!this.confirm_screen) {
             if (this.runtimeTranscription !== '') {
@@ -101,8 +102,8 @@ export default {
             }
           } else {
             if (this.runtimeTranscription !== '') {
-              let llt = this.runtimeTranscription.replace("concern","confirm")
-              if (this.runtimeTranscription.includes("confirm")) {
+              let llt = this.runtimeTranscription.replace("concern","confirm").replace("quotes","close")
+              if (llt.includes("confirm")) {
                 console.log(this.booking)
                 this.$emit('close')
               }

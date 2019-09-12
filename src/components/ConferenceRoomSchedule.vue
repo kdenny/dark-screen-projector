@@ -80,6 +80,8 @@ export default {
     }
     setTimeout(function(){
       me.getRoomSchedule();
+      this.recognition = null
+      this.listening = false
       me.listen();
       }, 30000);
     this.booking = false
