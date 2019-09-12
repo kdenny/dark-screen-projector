@@ -2,7 +2,12 @@
   <div class="full">
     <div class="calendar-title">Schedule for {{ room.name }} <span v-if="listening">**</span></div>
     <div v-if="schedule" class="schedule">
-      <div v-if="transcription.length > 0" style="height: 100px;">{{ transcription }}</div>
+      <div v-if="transcription.length > 0" style="height: 100px;">
+        {{ transcription }}
+      </div>
+      <div v-if="failed" style="height: 100px;">
+        Speech recognition not working :(
+      </div>
       <div v-for="day in days" v-bind:key="day" class="day-row">
         <div class="day-title">
           {{ day }}
@@ -56,6 +61,7 @@ export default {
       transcription: [],
       listening: false,
       room: null,
+      failed: null,
       booking: false,
       rd: {
         'tinypass.com_393837353833373831@resource.calendar.google.com': {
@@ -100,10 +106,12 @@ export default {
       var me = this
       window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
       if (!SpeechRecognition && process.env.NODE_ENV !== 'production') {
+        this.failed = true
         throw new Error('Speech Recognition does not exist on this browser. Use Chrome or Firefox')
       }
       if (!SpeechRecognition) {
         console.log("Speech failed :(")
+        this.failed = true
         return
       } else {
         this.listening = true
@@ -128,6 +136,10 @@ export default {
             if ((this.runtimeTranscription.includes('book') && this.runtimeTranscription.includes('room')) || ((this.runtimeTranscription.includes('conference')) && (this.runtimeTranscription.includes('room')))) {
               this.listening = false
               me.openBooking()
+            } else {
+              this.runtimeTranscription = null
+              this.recognition = null
+              this.listen()
             }
             this.transcription.push(this.runtimeTranscription)
             console.log(this.transcription)
@@ -138,11 +150,15 @@ export default {
       me.recognition.start()
     },
     openBooking () {
+      this.recognition = null
       this.booking = true
+      this.transcription = []
+      this.listening = false
     },
     closeModal () {
       this.booking = false
       this.transcription = []
+      this.listen()
     }
   },
   computed: {

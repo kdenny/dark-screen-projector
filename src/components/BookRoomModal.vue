@@ -102,7 +102,7 @@ export default {
             }
           } else {
             if (this.runtimeTranscription !== '') {
-              let llt = this.runtimeTranscription.replace("concern","confirm").replace("quotes","close")
+              let llt = this.runtimeTranscription.replace("concern","confirm").replace("quotes","close").replace("Rich Piana","3 PM")
               if (llt.includes("confirm")) {
                 console.log(this.booking)
                 this.$emit('close')
@@ -120,6 +120,7 @@ export default {
       me.recognition.start()
     },
     parseTime (text) {
+      var me = this
       let timeFormat = d3.timeFormat("%I:%M %p")
       let dateFormat = d3.timeFormat("%Y-%m-%d")
       let nt = text.replace("p.m.","PM").replace("pm","PM").replace("P.M.","PM").replace("P.m.","PM").replace("a.m.","AM").replace("am","AM").replace("A.M.","AM").replace("A.m.","AM")
