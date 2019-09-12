@@ -22,11 +22,11 @@ export default {
       rooms: {
         PHL: [
           {
-            name: 'Large Conference Room',
+            name: 'PHL Large Conference Room',
             key: 'tinypass.com_393837353833373831@resource.calendar.google.com'
           },
           {
-            name: 'Small Conference Room',
+            name: 'PHL Small Conference Room',
             key: 'tinypass.com_343739343839323532@resource.calendar.google.com'
           }
         ]

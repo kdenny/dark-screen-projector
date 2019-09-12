@@ -34,23 +34,28 @@
     <div v-if="!schedule" class="schedule">
       Loading room schedule...
     </div>
+    <book_room v-if="booking" :room="room" v-on:close="booking = false"></book_room>
 
   </div>
 </template>
 
 <script>
   /* eslint-disable */
-
   import * as d3 from 'd3'
+  import BookRoomModal from './BookRoomModal.vue'
 export default {
   name: 'ConferenceRoomSchedule',
   props: [],
+  components: {
+    book_room: BookRoomModal
+  },
   data () {
     return {
       rawSchedule: null,
       transcription: [],
       listening: false,
       room: null,
+      booking: false,
       rd: {
         'tinypass.com_393837353833373831@resource.calendar.google.com': {
           name: 'Large Conference Room',
@@ -76,6 +81,7 @@ export default {
       me.getRoomSchedule();
       me.listen();
       }, 30000);
+    this.booking = false
   },
   methods: {
     getRoomSchedule () {
@@ -112,13 +118,23 @@ export default {
       })
 
       this.recognition.addEventListener('end', () => {
-        if (this.runtimeTranscription !== '') {
-          this.transcription.push(this.runtimeTranscription)
-          console.log(this.transcription)
+        if (this.runtimeTranscription) {
+          console.log(this.runtimeTranscription)
+          if (this.runtimeTranscription !== '') {
+            if ((this.runtimeTranscription.includes('book') && this.runtimeTranscription.includes('room')) || ((this.runtimeTranscription.includes('conference')) && (this.runtimeTranscription.includes('room')))) {
+              this.listening = false
+              me.openBooking()
+            }
+            this.transcription.push(this.runtimeTranscription)
+            console.log(this.transcription)
+          }
+          this.runtimeTranscription = ''
         }
-        this.runtimeTranscription = ''
       })
       me.recognition.start()
+    },
+    openBooking () {
+      this.booking = true
     }
   },
   computed: {
@@ -173,8 +189,7 @@ export default {
       } else {
         return null
       }
-    },
-
+    }
   }
 }
 </script>
