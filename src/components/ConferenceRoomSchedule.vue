@@ -159,7 +159,7 @@ export default {
     padding-bottom: 20px;
   }
   .event-times {
-    width: 10vw;
+    width: 15vw;
     display: inline-block;
     vertical-align: top;
   }
