@@ -10,7 +10,12 @@
           <div class="event-row" v-for="event in schedule[day]" v-bind:key="event.cal_id">
             <div class="event-record">
               <div class="event-times">
-                {{ event.start_time }} - {{ event.end_time }}
+                <div class="start-time">
+                  {{ event.start_time }} -
+                </div>
+                <div class="end-time">
+                  {{ event.end_time }}
+                </div>
               </div>
               <div class="event-name">
                 <div class="event-title">
@@ -63,7 +68,7 @@ export default {
     },
     schedule () {
       let timeParse = d3.timeParse("%Y-%m-%dT%H:%M:%S")
-      let timeFormat = d3.timeFormat("%H:%M")
+      let timeFormat = d3.timeFormat("%I:%M %p")
       let dateFormat = d3.timeFormat("%Y-%m-%d")
       if (this.rawSchedule) {
         let g = this.rawSchedule.data
@@ -75,10 +80,10 @@ export default {
           let s = timeParse(st)
           let e = timeParse(et)
           ev.start = s
-          ev.start_time = timeFormat(s)
+          ev.start_time = timeFormat(d3.timeHour.offset(s, 3))
           ev.start_date = dateFormat(s)
           ev.end = e
-          ev.end_time = timeFormat(e)
+          ev.end_time = timeFormat(d3.timeHour.offset(e, 3))
           ev.end_date = dateFormat(e)
           ev.end = e
           return ev
@@ -154,7 +159,7 @@ export default {
     padding-bottom: 20px;
   }
   .event-times {
-    width: 15vw;
+    width: 10vw;
     display: inline-block;
     vertical-align: top;
   }
