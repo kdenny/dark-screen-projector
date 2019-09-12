@@ -2,6 +2,7 @@
   <div class="full">
     <div class="calendar-title">Schedule for {{ room.name }} <span v-if="listening">**</span></div>
     <div v-if="schedule" class="schedule">
+      <div v-if="transcription.length > 0" style="height: 100px;">{{ transcription }}</div>
       <div v-for="day in days" v-bind:key="day" class="day-row">
         <div class="day-title">
           {{ day }}
@@ -34,7 +35,7 @@
     <div v-if="!schedule" class="schedule">
       Loading room schedule...
     </div>
-    <book_room v-if="booking" :room="room" v-on:close="booking = false"></book_room>
+    <book_room v-if="booking" :room="room" v-on:close="closeModal"></book_room>
 
   </div>
 </template>
@@ -135,6 +136,10 @@ export default {
     },
     openBooking () {
       this.booking = true
+    },
+    closeModal () {
+      this.booking = false
+      this.transcription = []
     }
   },
   computed: {

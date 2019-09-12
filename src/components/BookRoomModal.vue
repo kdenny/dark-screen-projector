@@ -140,6 +140,9 @@ export default {
         console.log(this.booking)
         this.confirm_screen = true
         this.listen()
+        setTimeout(function(){
+          me.$emit('close')
+        }, 60000);
       }
     }
   }
